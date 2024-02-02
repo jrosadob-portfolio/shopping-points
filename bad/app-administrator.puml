@@ -1,0 +1,34 @@
+@startuml blogging-context
+title "Context Diagram: Web Admninistrator"
+!include <C4/C4_Component>
+
+' Person
+Person(user, "Owner users", "Users the application")
+
+' Frontend Application
+System(FrontendApp, "Web Administrator", "Frontend: Angular")
+
+' Gateway 
+System(APIGateway, "API Gateway", "Routes requests to the appropriate backend services")
+
+' Backend Services
+System(Backend, "Backend Administrator", "Handles the business logic")
+
+' Consumers
+System(ConsumerMail, "Mail sender", "Sends emails to users (Net Core)")
+System(ConsumerNotification, "Notification sender", "Sends SMS to users (Net Core)")
+System(ConsumerLog, "Log register", "Registers logs  into database BigQuery (Net Core)")
+System(ConsumerLogger, "Logger register", "Register logger into database BigQuery (Net Core)")
+
+' Relationships
+Rel_R(user, FrontendApp, "Uses", "HTTPS")
+Rel_D(FrontendApp, APIGateway, "Sends requests to", "HTTPS")
+Rel_D(APIGateway, Backend, "Routes requests to", "HTTPS")
+Rel(Backend, ConsumerMail, "Producers emails to", "AMQP")
+Rel(Backend, ConsumerNotification, "Producers SMS to", "AMQP")
+Rel(Backend, ConsumerLog, "Producers logs to", "AMQP")
+Rel(Backend, ConsumerLogger, "Producers logger to", "AMQP")
+Rel(FrontendApp, ConsumerLogger, "Producers logger to", "AMQP")
+
+footer Drawn with PlantUML v. %version() and C4-PlantUML v. C4Version()
+@enduml

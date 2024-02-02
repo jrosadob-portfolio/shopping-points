@@ -1,0 +1,12 @@
+@startuml blogging-context
+title "Context Diagram: API Business"
+!include <C4/C4_Component>
+
+System_Ext(AppClient, "Application client", "System of the client company ")
+System(ApiBusiness, "API Business", "API for client company systems")
+
+' Relationships
+Rel_R(AppClient, ApiBusiness, "Uses", "HTTPS")
+
+footer Drawn with PlantUML v. %version() and C4-PlantUML v. C4Version()
+@enduml

@@ -1,0 +1,65 @@
+@startuml blogging-context
+title "Container Diagram: Web Admninistrator"
+!include <C4/C4_Component>
+
+!define DEVICONS ./../devicons
+!define DEVICONS2 ./../devicons2
+
+!include DEVICONS/angular.puml
+!include DEVICONS/java.puml
+!include DEVICONS2/nestjs.puml
+!include DEVICONS/swift.puml
+!include DEVICONS/dotnet.puml
+!include DEVICONS/mysql.puml
+
+Person(userPerson, "Owner users", "Users the application")
+
+Rel_R(userPerson, adminSystem, "Uses", "HTTPS")
+System_Boundary(adminSystem, "Web Administrator") {
+    Container(webAdmin, "Web App", "Angular", $sprite="angular")
+    Container(backAdmin, "Backend", "Pendiente", $sprite="dotnet")
+    ContainerDb(dbAdmin, "Database", "MySQL", $sprite="mysql")
+}
+
+System_Boundary(mailSystem, "Mail system") {
+    Container(backMail, "Backend", "Pendiente", $sprite="dotnet")
+    ContainerDb(dbMail, "Database", "BigQuery", $sprite="mysql")
+}
+Rel_R(backMail, dbMail, "Uses", "HTTPS")
+
+System_Boundary(logSystem, "Log system") {
+    Container(backLog, "Backend", "Pendiente", $sprite="dotnet")
+    ContainerDb(dbLog, "Database", "BigQuery", $sprite="mysql")
+}
+Rel_R(backLog, dbLog, "Uses", "HTTPS")
+
+System_Boundary(summarySystem, "Summary system") {
+    Container(backSummary, "Backend", "Pendiente", $sprite="dotnet")
+    ContainerDb(dbSummary, "Database", "BigQuery", $sprite="mysql")
+}
+Rel_R(backSummary, dbSummary, "Uses", "HTTPS")
+
+System_Boundary(loggerSystem, "Logger system") {
+    Container(backLogger, "Backend", "Pendiente", $sprite="dotnet")
+    ContainerDb(dbLogger, "Database", "BigQuery", $sprite="mysql")
+}
+Rel_R(backLogger, dbLogger, "Uses", "HTTPS")
+
+System_Boundary(notificationSystem, "Notification system") {
+    Container(backNotification, "Backend", "Pendiente", $sprite="dotnet")
+    ContainerDb(dbNotification, "Database", "BigQuery", $sprite="mysql")
+}
+Rel_R(backNotification, dbNotification, "Uses", "HTTPS")
+
+
+Rel_R(webAdmin, backAdmin, "Uses", "HTTPS")
+Rel_R(backAdmin, dbAdmin, "Reads from and writes to", "JPA")
+
+Rel_D(backAdmin, mailSystem, "Uses", "AMQP")
+Rel_D(backAdmin, notificationSystem, "Uses", "AMQP")
+Rel_D(backAdmin, summarySystem, "Uses", "AMQP")
+Rel_U(backAdmin, logSystem, "Uses", "AMQP")
+Rel_U(backAdmin, loggerSystem, "Uses", "AMQP")
+
+footer Drawn with PlantUML v. %version() and C4-PlantUML v. C4Version()
+@enduml

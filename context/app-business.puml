@@ -1,0 +1,25 @@
+@startuml blogging-context
+title "Context Diagram: Web Admninistrator"
+!include <C4/C4_Component>
+
+' Persons
+Person_Ext(userPerson, "User client", "Client company users")
+
+' Applications
+System(businessSystem, "Web Business", "Web for client company users")
+System(mailSystem, "Mail sender", "Sends emails to users (Net Core)")
+System(logSystem, "Log register", "Registers logs into database BigQuery")
+System(summarySystem, "Summary data", "Recovery from BigQuery database")
+System(loggerSystem, "Logger register", "Register logger into database BigQuery")
+System(notificationSystem, "Notification sender", "Sends notification to users")
+
+' Relationships
+Rel_R(userPerson, businessSystem, "Uses", "HTTPS")
+Rel_D(businessSystem, mailSystem, "Uses", "AMQP")
+Rel_D(businessSystem, notificationSystem, "Uses", "AMQP")
+Rel_D(businessSystem, summarySystem, "Uses", "AMQP")
+Rel_D(businessSystem, logSystem, "Uses", "AMQP")
+Rel_D(businessSystem, loggerSystem, "Uses", "AMQP")
+
+footer Drawn with PlantUML v. %version() and C4-PlantUML v. C4Version()
+@enduml

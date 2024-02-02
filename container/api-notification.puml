@@ -1,0 +1,16 @@
+@startuml blogging-context
+title "Container diagram for API Summery"
+!include <C4/C4_Component>
+
+System(adminSystem, "Web Administrator", "Solution administrator")
+
+System_Boundary(logSystem, "Log system") {
+    Container(backLog, "Backend", "Pendiente", $sprite="dotnet")
+    ContainerDb(dbLog, "Database", "BigQuery", $sprite="mysql")
+}
+
+Rel_R(adminSystem, logSystem, "Uses", "HTTPS")
+Rel_R(backLog, dbLog, "Uses", "HTTPS")
+
+footer Drawn with PlantUML v. %version() and C4-PlantUML v. C4Version()
+@enduml
